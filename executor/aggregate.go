@@ -166,8 +166,10 @@ type HashAggExec struct {
 	// After we support parallel execution for aggregation functions with distinct,
 	// we can remove this attribute.
 	isUnparallelExec bool
-	prepared         bool
-	executed         bool
+	// If all aggFuncs of the executor are `distinct`
+	isAllFirstRow bool
+	prepared      bool
+	executed      bool
 
 	memTracker *memory.Tracker // track memory usage.
 }
@@ -717,10 +719,18 @@ func (e *HashAggExec) parallelExec(ctx context.Context, chk *chunk.Chunk) error 
 func (e *HashAggExec) unparallelExec(ctx context.Context, chk *chunk.Chunk) error {
 	// In this stage we consider all data from src as a single group.
 	if !e.prepared {
-		err := e.execute(ctx)
-		if err != nil {
-			return err
+		if e.isAllFirstRow {
+			err := e.executeAllFirstRow(ctx, chk)
+			if err != nil {
+				return err
+			}
+		} else {
+			err := e.execute(ctx)
+			if err != nil {
+				return err
+			}
 		}
+
 		if (len(e.groupSet) == 0) && len(e.GroupByItems) == 0 {
 			// If no groupby and no data, we should add an empty group.
 			// For example:
@@ -791,6 +801,54 @@ func (e *HashAggExec) execute(ctx context.Context) (err error) {
 				if err != nil {
 					return err
 				}
+			}
+		}
+	}
+}
+
+// execute fetches Chunks from src and update each aggregate function for each row in Chunk.
+func (e *HashAggExec) executeAllFirstRow(ctx context.Context, chk *chunk.Chunk) (err error) {
+	for {
+		mSize := e.childResult.MemoryUsage()
+		err := Next(ctx, e.children[0], e.childResult)
+		e.memTracker.Consume(e.childResult.MemoryUsage() - mSize)
+		if err != nil {
+			return err
+		}
+
+		failpoint.Inject("unparallelHashAggError", func(val failpoint.Value) {
+			if val.(bool) {
+				failpoint.Return(errors.New("HashAggExec.unparallelExec error"))
+			}
+		})
+
+		// no more data.
+		if e.childResult.NumRows() == 0 {
+			return nil
+		}
+
+		e.groupKeyBuffer, err = getGroupKey(e.ctx, e.childResult, e.groupKeyBuffer, e.GroupByItems)
+		if err != nil {
+			return err
+		}
+
+		for j := 0; j < e.childResult.NumRows(); j++ {
+			groupKey := string(e.groupKeyBuffer[j])
+			if !e.groupSet.Exist(groupKey) {
+				e.groupSet.Insert(groupKey)
+				e.groupKeys = append(e.groupKeys, groupKey)
+			}
+			partialResults := e.getPartialResults(groupKey)
+			enoughRow := true
+			for i, af := range e.PartialAggFuncs {
+				err = af.UpdatePartialResult(e.ctx, []chunk.Row{e.childResult.GetRow(j)}, partialResults[i])
+				if err != nil {
+					return err
+				}
+				enoughRow = enoughRow && af.AccquiredEnoughRows(chk.RequiredRows())
+			}
+			if enoughRow {
+				return nil
 			}
 		}
 	}

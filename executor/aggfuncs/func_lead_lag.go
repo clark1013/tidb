@@ -27,6 +27,10 @@ type baseLeadLag struct {
 	offset      uint64
 }
 
+func (e *baseLeadLag) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type partialResult4LeadLag struct {
 	rows   []chunk.Row
 	curIdx uint64

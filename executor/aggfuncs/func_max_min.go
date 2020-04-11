@@ -138,6 +138,10 @@ func (e *maxMin4Int) MergePartialResult(sctx sessionctx.Context, src, dst Partia
 	return nil
 }
 
+func (e *maxMin4Int) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type maxMin4Uint struct {
 	baseMaxMinAggFunc
 }
@@ -200,6 +204,10 @@ func (e *maxMin4Uint) MergePartialResult(sctx sessionctx.Context, src, dst Parti
 		p2.val, p2.isNull = p1.val, false
 	}
 	return nil
+}
+
+func (e *maxMin4Uint) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 // maxMin4Float32 gets a float32 input and returns a float32 result.
@@ -267,6 +275,10 @@ func (e *maxMin4Float32) MergePartialResult(sctx sessionctx.Context, src, dst Pa
 	return nil
 }
 
+func (e *maxMin4Float32) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type maxMin4Float64 struct {
 	baseMaxMinAggFunc
 }
@@ -328,6 +340,10 @@ func (e *maxMin4Float64) MergePartialResult(sctx sessionctx.Context, src, dst Pa
 		p2.val, p2.isNull = p1.val, false
 	}
 	return nil
+}
+
+func (e *maxMin4Float64) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type maxMin4Decimal struct {
@@ -392,6 +408,10 @@ func (e *maxMin4Decimal) MergePartialResult(sctx sessionctx.Context, src, dst Pa
 		p2.val, p2.isNull = p1.val, false
 	}
 	return nil
+}
+
+func (e *maxMin4Decimal) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type maxMin4String struct {
@@ -465,6 +485,10 @@ func (e *maxMin4String) MergePartialResult(sctx sessionctx.Context, src, dst Par
 	return nil
 }
 
+func (e *maxMin4String) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type maxMin4Time struct {
 	baseMaxMinAggFunc
 }
@@ -527,6 +551,10 @@ func (e *maxMin4Time) MergePartialResult(sctx sessionctx.Context, src, dst Parti
 		p2.val, p2.isNull = p1.val, false
 	}
 	return nil
+}
+
+func (e *maxMin4Time) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type maxMin4Duration struct {
@@ -593,6 +621,10 @@ func (e *maxMin4Duration) MergePartialResult(sctx sessionctx.Context, src, dst P
 	return nil
 }
 
+func (e *maxMin4Duration) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type maxMin4JSON struct {
 	baseMaxMinAggFunc
 }
@@ -656,4 +688,8 @@ func (e *maxMin4JSON) MergePartialResult(sctx sessionctx.Context, src, dst Parti
 		p2.isNull = false
 	}
 	return nil
+}
+
+func (e *maxMin4JSON) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }

@@ -143,6 +143,10 @@ func (e *groupConcat) GetTruncated() *int32 {
 	return e.truncated
 }
 
+func (e *groupConcat) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type partialResult4GroupConcatDistinct struct {
 	basePartialResult4GroupConcat
 	valSet            set.StringSet
@@ -213,4 +217,8 @@ func (e *groupConcatDistinct) SetTruncated(t *int32) {
 // GetTruncated will be called in `executorBuilder#buildHashAgg` with duck-type.
 func (e *groupConcatDistinct) GetTruncated() *int32 {
 	return e.truncated
+}
+
+func (e *groupConcatDistinct) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }

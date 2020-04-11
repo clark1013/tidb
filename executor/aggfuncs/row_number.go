@@ -45,3 +45,7 @@ func (rn *rowNumber) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Partial
 	chk.AppendInt64(rn.ordinal, p.curIdx)
 	return nil
 }
+
+func (e *rowNumber) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
