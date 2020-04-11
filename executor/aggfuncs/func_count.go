@@ -83,6 +83,10 @@ func (e *countOriginal4Int) Slide(sctx sessionctx.Context, rows []chunk.Row, las
 	return nil
 }
 
+func (e *countOriginal4Int) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type countOriginal4Real struct {
 	baseCount
 }
@@ -128,6 +132,10 @@ func (e *countOriginal4Real) Slide(sctx sessionctx.Context, rows []chunk.Row, la
 		*p++
 	}
 	return nil
+}
+
+func (e *countOriginal4Real) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type countOriginal4Decimal struct {
@@ -177,6 +185,10 @@ func (e *countOriginal4Decimal) Slide(sctx sessionctx.Context, rows []chunk.Row,
 	return nil
 }
 
+func (e *countOriginal4Decimal) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type countOriginal4Time struct {
 	baseCount
 }
@@ -222,6 +234,10 @@ func (e *countOriginal4Time) Slide(sctx sessionctx.Context, rows []chunk.Row, la
 		*p++
 	}
 	return nil
+}
+
+func (e *countOriginal4Time) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type countOriginal4Duration struct {
@@ -271,6 +287,10 @@ func (e *countOriginal4Duration) Slide(sctx sessionctx.Context, rows []chunk.Row
 	return nil
 }
 
+func (e *countOriginal4Duration) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type countOriginal4JSON struct {
 	baseCount
 }
@@ -316,6 +336,10 @@ func (e *countOriginal4JSON) Slide(sctx sessionctx.Context, rows []chunk.Row, la
 		*p++
 	}
 	return nil
+}
+
+func (e *countOriginal4JSON) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type countOriginal4String struct {
@@ -365,6 +389,10 @@ func (e *countOriginal4String) Slide(sctx sessionctx.Context, rows []chunk.Row, 
 	return nil
 }
 
+func (e *countOriginal4String) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type countPartial struct {
 	baseCount
 }
@@ -389,6 +417,10 @@ func (*countPartial) MergePartialResult(sctx sessionctx.Context, src, dst Partia
 	p1, p2 := (*partialResult4Count)(src), (*partialResult4Count)(dst)
 	*p2 += *p1
 	return nil
+}
+
+func (e *countPartial) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type countOriginalWithDistinct struct {
@@ -511,6 +543,10 @@ func (e *countOriginalWithDistinct) evalAndEncode(
 		return nil, false, errors.Errorf("unsupported column type for encode %d", tp)
 	}
 	return encodedBytes, isNull, err
+}
+
+func (e *countOriginalWithDistinct) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 func appendInt64(encodedBytes, buf []byte, val int64) []byte {

@@ -128,6 +128,11 @@ type AggFunc interface {
 	// partial result and then calculates the final result and append that
 	// final result to the chunk provided.
 	AppendFinalResult2Chunk(sctx sessionctx.Context, pr PartialResult, chk *chunk.Chunk) error
+
+	// to fix: https://github.com/pingcap/tidb/issues/15284
+	// AccquiredEnoughRows check if a aggregation has scaned enough rows and can be returned immediately
+	// Now it's only meaningful for DISTINCT
+	AccquiredEnoughRows(requiredRows int) bool
 }
 
 type baseAggFunc struct {

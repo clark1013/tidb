@@ -98,6 +98,10 @@ func (e *baseSum4Float64) MergePartialResult(sctx sessionctx.Context, src, dst P
 	return nil
 }
 
+func (e *baseSum4Float64) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type sum4Float64 struct {
 	baseSum4Float64
 }
@@ -241,6 +245,10 @@ func (e *sum4Decimal) MergePartialResult(sctx sessionctx.Context, src, dst Parti
 	return nil
 }
 
+func (e *sum4Decimal) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type sum4DistinctFloat64 struct {
 	baseSumAggFunc
 }
@@ -287,6 +295,10 @@ func (e *sum4DistinctFloat64) AppendFinalResult2Chunk(sctx sessionctx.Context, p
 	}
 	chk.AppendFloat64(e.ordinal, p.val)
 	return nil
+}
+
+func (e *sum4DistinctFloat64) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type sum4DistinctDecimal struct {
@@ -347,4 +359,8 @@ func (e *sum4DistinctDecimal) AppendFinalResult2Chunk(sctx sessionctx.Context, p
 	}
 	chk.AppendMyDecimal(e.ordinal, &p.val)
 	return nil
+}
+
+func (e *sum4DistinctDecimal) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }

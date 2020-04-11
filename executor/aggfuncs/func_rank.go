@@ -69,6 +69,10 @@ func (r *rank) AppendFinalResult2Chunk(sctx sessionctx.Context, pr PartialResult
 	return nil
 }
 
+func (r *rank) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type rowComparer struct {
 	cmpFuncs []chunk.CompareFunc
 	colIdx   []int

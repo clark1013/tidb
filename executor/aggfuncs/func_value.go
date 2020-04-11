@@ -260,6 +260,10 @@ func (v *firstValue) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Partial
 	return nil
 }
 
+func (v *firstValue) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type lastValue struct {
 	baseAggFunc
 
@@ -300,6 +304,10 @@ func (v *lastValue) AppendFinalResult2Chunk(sctx sessionctx.Context, pr PartialR
 		p.evaluator.appendResult(chk, v.ordinal)
 	}
 	return nil
+}
+
+func (v *lastValue) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type nthValue struct {
@@ -347,4 +355,8 @@ func (v *nthValue) AppendFinalResult2Chunk(sctx sessionctx.Context, pr PartialRe
 		p.evaluator.appendResult(chk, v.ordinal)
 	}
 	return nil
+}
+
+func (v *nthValue) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }

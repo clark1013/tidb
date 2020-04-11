@@ -76,6 +76,10 @@ func (e *baseAvgDecimal) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Par
 	return nil
 }
 
+func (e *baseAvgDecimal) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type avgOriginal4Decimal struct {
 	baseAvgDecimal
 }
@@ -229,6 +233,10 @@ func (e *avgOriginal4DistinctDecimal) AppendFinalResult2Chunk(sctx sessionctx.Co
 	return nil
 }
 
+func (e *avgOriginal4DistinctDecimal) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 // All the following avg function implementations return the float64 result,
 // which store the partial results in "partialResult4AvgFloat64".
 //
@@ -262,6 +270,10 @@ func (e *baseAvgFloat64) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Par
 		chk.AppendFloat64(e.ordinal, p.sum/float64(p.count))
 	}
 	return nil
+}
+
+func (e *baseAvgFloat64) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }
 
 type avgOriginal4Float64 struct {
@@ -369,4 +381,8 @@ func (e *avgOriginal4DistinctFloat64) AppendFinalResult2Chunk(sctx sessionctx.Co
 	}
 	chk.AppendFloat64(e.ordinal, p.sum/float64(p.count))
 	return nil
+}
+
+func (e *avgOriginal4DistinctFloat64) AccquiredEnoughRows(requiredRows int) bool {
+	return false
 }

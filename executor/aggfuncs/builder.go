@@ -220,31 +220,31 @@ func buildFirstRow(aggFuncDesc *aggregation.AggFuncDesc, ordinal int) AggFunc {
 	default:
 		switch fieldType.Tp {
 		case mysql.TypeEnum:
-			return &firstRow4Enum{base}
+			return &firstRow4Enum{base, 0}
 		case mysql.TypeSet:
-			return &firstRow4Set{base}
+			return &firstRow4Set{base, 0}
 		}
 
 		switch evalType {
 		case types.ETInt:
-			return &firstRow4Int{base}
+			return &firstRow4Int{base, 0}
 		case types.ETReal:
 			switch fieldType.Tp {
 			case mysql.TypeFloat:
-				return &firstRow4Float32{base}
+				return &firstRow4Float32{base, 0}
 			case mysql.TypeDouble:
-				return &firstRow4Float64{base}
+				return &firstRow4Float64{base, 0}
 			}
 		case types.ETDecimal:
-			return &firstRow4Decimal{base}
+			return &firstRow4Decimal{base, 0}
 		case types.ETDatetime, types.ETTimestamp:
-			return &firstRow4Time{base}
+			return &firstRow4Time{base, 0}
 		case types.ETDuration:
-			return &firstRow4Duration{base}
+			return &firstRow4Duration{base, 0}
 		case types.ETString:
-			return &firstRow4String{base}
+			return &firstRow4String{base, 0}
 		case types.ETJson:
-			return &firstRow4JSON{base}
+			return &firstRow4JSON{base, 0}
 		}
 	}
 	return nil

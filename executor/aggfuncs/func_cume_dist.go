@@ -56,3 +56,7 @@ func (r *cumeDist) AppendFinalResult2Chunk(sctx sessionctx.Context, pr PartialRe
 	chk.AppendFloat64(r.ordinal, float64(p.lastRank)/float64(numRows))
 	return nil
 }
+
+func (r *cumeDist) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}

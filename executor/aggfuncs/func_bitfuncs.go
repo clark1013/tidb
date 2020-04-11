@@ -41,6 +41,10 @@ func (e *baseBitAggFunc) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Par
 	return nil
 }
 
+func (e *baseBitAggFunc) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type bitOrUint64 struct {
 	baseBitAggFunc
 }

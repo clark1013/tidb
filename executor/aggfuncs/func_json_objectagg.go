@@ -112,3 +112,7 @@ func (e *jsonObjectAgg) MergePartialResult(sctx sessionctx.Context, src PartialR
 	}
 	return nil
 }
+
+func (e *jsonObjectAgg) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}

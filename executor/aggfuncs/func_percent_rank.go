@@ -59,3 +59,7 @@ func (pr *percentRank) AppendFinalResult2Chunk(sctx sessionctx.Context, partial 
 	chk.AppendFloat64(pr.ordinal, float64(p.lastRank-1)/float64(numRows-1))
 	return nil
 }
+
+func (pr *percentRank) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}

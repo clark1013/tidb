@@ -91,6 +91,8 @@ type partialResult4FirstRowSet struct {
 
 type firstRow4Int struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4Int) AllocPartialResult() PartialResult {
@@ -113,6 +115,7 @@ func (e *firstRow4Int) UpdatePartialResult(sctx sessionctx.Context, rowsInGroup 
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, isNull, input
+		e.accquiredRows++
 	}
 	return nil
 }
@@ -135,8 +138,14 @@ func (e *firstRow4Int) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Parti
 	return nil
 }
 
+func (e *firstRow4Int) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4Float32 struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4Float32) AllocPartialResult() PartialResult {
@@ -159,6 +168,7 @@ func (e *firstRow4Float32) UpdatePartialResult(sctx sessionctx.Context, rowsInGr
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, isNull, float32(input)
+		e.accquiredRows++
 	}
 	return nil
 }
@@ -180,8 +190,14 @@ func (e *firstRow4Float32) AppendFinalResult2Chunk(sctx sessionctx.Context, pr P
 	return nil
 }
 
+func (e *firstRow4Float32) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4Float64 struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4Float64) AllocPartialResult() PartialResult {
@@ -204,6 +220,7 @@ func (e *firstRow4Float64) UpdatePartialResult(sctx sessionctx.Context, rowsInGr
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, isNull, input
+		e.accquiredRows++
 	}
 	return nil
 }
@@ -225,8 +242,14 @@ func (e *firstRow4Float64) AppendFinalResult2Chunk(sctx sessionctx.Context, pr P
 	return nil
 }
 
+func (e *firstRow4Float64) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4String struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4String) AllocPartialResult() PartialResult {
@@ -249,6 +272,7 @@ func (e *firstRow4String) UpdatePartialResult(sctx sessionctx.Context, rowsInGro
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, isNull, stringutil.Copy(input)
+		e.accquiredRows++
 	}
 	return nil
 }
@@ -271,8 +295,14 @@ func (e *firstRow4String) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Pa
 	return nil
 }
 
+func (e *firstRow4String) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4Time struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4Time) AllocPartialResult() PartialResult {
@@ -295,6 +325,7 @@ func (e *firstRow4Time) UpdatePartialResult(sctx sessionctx.Context, rowsInGroup
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, isNull, input
+		e.accquiredRows++
 	}
 	return nil
 }
@@ -317,8 +348,14 @@ func (e *firstRow4Time) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Part
 	return nil
 }
 
+func (e *firstRow4Time) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4Duration struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4Duration) AllocPartialResult() PartialResult {
@@ -341,6 +378,7 @@ func (e *firstRow4Duration) UpdatePartialResult(sctx sessionctx.Context, rowsInG
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, isNull, input
+		e.accquiredRows++
 	}
 	return nil
 }
@@ -362,8 +400,14 @@ func (e *firstRow4Duration) AppendFinalResult2Chunk(sctx sessionctx.Context, pr 
 	return nil
 }
 
+func (e *firstRow4Duration) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4JSON struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4JSON) AllocPartialResult() PartialResult {
@@ -386,6 +430,7 @@ func (e *firstRow4JSON) UpdatePartialResult(sctx sessionctx.Context, rowsInGroup
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, isNull, input.Copy()
+		e.accquiredRows++
 	}
 	return nil
 }
@@ -407,8 +452,14 @@ func (e *firstRow4JSON) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Part
 	return nil
 }
 
+func (e *firstRow4JSON) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4Decimal struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4Decimal) AllocPartialResult() PartialResult {
@@ -431,6 +482,7 @@ func (e *firstRow4Decimal) UpdatePartialResult(sctx sessionctx.Context, rowsInGr
 			return err
 		}
 		p.gotFirstRow, p.isNull = true, isNull
+		e.accquiredRows++
 		if input != nil {
 			p.val = *input
 		}
@@ -456,8 +508,14 @@ func (*firstRow4Decimal) MergePartialResult(sctx sessionctx.Context, src Partial
 	return nil
 }
 
+func (e *firstRow4Decimal) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4Enum struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4Enum) AllocPartialResult() PartialResult {
@@ -480,6 +538,7 @@ func (e *firstRow4Enum) UpdatePartialResult(sctx sessionctx.Context, rowsInGroup
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, d.IsNull(), d.GetMysqlEnum()
+		e.accquiredRows++
 		break
 	}
 	return nil
@@ -502,8 +561,14 @@ func (e *firstRow4Enum) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Part
 	return nil
 }
 
+func (e *firstRow4Enum) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
+}
+
 type firstRow4Set struct {
 	baseAggFunc
+	// accquiredRows is the number of scanned distinct value
+	accquiredRows int
 }
 
 func (e *firstRow4Set) AllocPartialResult() PartialResult {
@@ -526,6 +591,7 @@ func (e *firstRow4Set) UpdatePartialResult(sctx sessionctx.Context, rowsInGroup 
 			return err
 		}
 		p.gotFirstRow, p.isNull, p.val = true, d.IsNull(), d.GetMysqlSet()
+		e.accquiredRows++
 		break
 	}
 	return nil
@@ -546,4 +612,8 @@ func (e *firstRow4Set) AppendFinalResult2Chunk(sctx sessionctx.Context, pr Parti
 	}
 	chk.AppendSet(e.ordinal, p.val)
 	return nil
+}
+
+func (e *firstRow4Set) AccquiredEnoughRows(requiredRows int) bool {
+	return e.accquiredRows >= requiredRows
 }

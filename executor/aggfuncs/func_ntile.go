@@ -78,3 +78,7 @@ func (n *ntile) AppendFinalResult2Chunk(_ sessionctx.Context, pr PartialResult, 
 	}
 	return nil
 }
+
+func (n *ntile) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}

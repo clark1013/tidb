@@ -24,6 +24,10 @@ type baseVarPopAggFunc struct {
 	baseAggFunc
 }
 
+func (e *baseVarPopAggFunc) AccquiredEnoughRows(requiredRows int) bool {
+	return false
+}
+
 type varPop4Float64 struct {
 	baseVarPopAggFunc
 }
